@@ -1,3 +1,4 @@
+<head>
 <script>
 
   var clientId = '775021312886-0dlsrrgg2mfchib14oicf2lt8ujd11t8.apps.googleusercontent.com';
@@ -43,7 +44,35 @@
        alert(result.data)
     }
   }
-</script>
 
+ /////////////////////////////////////////////////////
 
+      basic_key = 'AIzaSyA0wNVsiRhTqykHWvrkhjvwQ5FjIb7IlnQ'
+      function appendResults(text) {
+        var results = document.getElementById('results');
+        results.appendChild(document.createElement('P'));
+        results.appendChild(document.createTextNode(text));
+      }
+
+      function makeRequest() {
+        var request = gapi.client.urlshortener.url.get({
+          'shortUrl': 'http://goo.gl/fbsS'
+        });
+        request.execute(function(response) {
+          appendResults(response.longUrl);
+        });
+      }
+
+      function load() {
+        gapi.client.setApiKey(basic_key);
+        gapi.client.load('urlshortener', 'v1', makeRequest);
+      }
+    </script>
+
+<script src="https://apis.google.com/js/client.js?onload=load"></script>
 <script language='javascript' src='https://apis.google.com/js/api.js?onload=onApiLoad'></script>
+
+</head>
+<body>
+  <div id="results"></div>
+</body>
