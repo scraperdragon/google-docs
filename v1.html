@@ -34,27 +34,34 @@
 
   function pickerCallback(data) {
     if (data.action == google.picker.Action.PICKED) {  // not CANCELED
-       file_id = data.docs[0].id;
-       alert('URL: ' + file_id);
-
-    for (var myprop in google){
-      document.write(myprop+": "+google[myprop]+"<br>")
-    }
-
-       alert(result.data)
+       use_id(data.docs[0].id);
     }
   }
 
  /////////////////////////////////////////////////////
 
-      basic_key = 'AIzaSyA0wNVsiRhTqykHWvrkhjvwQ5FjIb7IlnQ'
+      var basic_key = 'AIzaSyA0wNVsiRhTqykHWvrkhjvwQ5FjIb7IlnQ'
       function appendResults(text) {
         var results = document.getElementById('results');
         results.appendChild(document.createElement('P'));
         results.appendChild(document.createTextNode(text));
       }
 
+      function use_id(id) {
+        alert('use_id'+id);
+        console.log('====');
+        var request = gapi.client.drive.files.get(
+          {'id': id}
+        )
+        console.log('request made')
+        request.execute(function(response) {
+          alert ('resp'+response);
+        });
+      }
+
       function makeRequest() {
+        //alert ('aT:'+accessToken); //racy
+        gapi.auth.setToken(accessToken);
         var request = gapi.client.urlshortener.url.get({
           'shortUrl': 'http://goo.gl/fbsS'
         });
@@ -65,6 +72,7 @@
 
       function load() {
         gapi.client.setApiKey(basic_key);
+        gapi.client.load('drive', 'v1'); // racy
         gapi.client.load('urlshortener', 'v1', makeRequest);
       }
     </script>
