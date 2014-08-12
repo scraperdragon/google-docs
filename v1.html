@@ -23,13 +23,27 @@
     var picker = new google.picker.PickerBuilder()
       .setOAuthToken(accessToken)
       .setDeveloperKey(developerKey)
-      .addView(new google.picker.DocsUploadView())
+      //.addView(new google.picker.DocsUploadView())
       .addView(new google.picker.DocsView())
+      .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+      .setCallback(pickerCallback)
       .build();
     picker.setVisible(true);
+  }
+
+  function pickerCallback(data) {
+    if (data.action == google.picker.Action.PICKED) {  // not CANCELED
+       file_id = data.docs[0].id;
+       alert('URL: ' + file_id);
+
+    for (var myprop in google){
+      document.write(myprop+": "+google[myprop]+"<br>")
+    }
+
+       alert(result.data)
+    }
   }
 </script>
 
 
 <script language='javascript' src='https://apis.google.com/js/api.js?onload=onApiLoad'></script>
-
