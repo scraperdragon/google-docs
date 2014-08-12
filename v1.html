@@ -49,6 +49,9 @@
 
       function use_id(id) {
         alert('use_id'+id);
+        alert(gapi.auth.getToken().access_token);
+        console.log("ACCESSTOKEN");
+        console.log(gapi.auth.getToken().access_token);
         console.log('====');
         var request = gapi.client.drive.files.get(
           {'id': id}
