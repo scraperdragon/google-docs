@@ -1,0 +1,36 @@
+<script>
+
+  var clientId = '775021312886-j1gjqgbmc329o6u30j3tm76qs2oio35t.apps.googleusercontent.com';
+  var developerKey = 'AIzaSyA0wNVsiRhTqykHWvrkhjvwQ5FjIb7IlnQ'  // browser app API key
+  // var developerKey = 'AIzaSyBTEWsJ4aXdoOzB4ey81eX9-ja7HejL4Qc';
+  var accessToken;
+  function onApiLoad() {
+    gapi.load('auth', authenticateWithGoogle);
+    gapi.load('picker');
+  }
+  function authenticateWithGoogle() {
+    window.gapi.auth.authorize({
+      'client_id': clientId,
+      'scope': ['https://www.googleapis.com/auth/drive']
+    }, handleAuthentication);
+  }
+  function handleAuthentication(result) {
+    if(result && !result.error) {
+      accessToken = result.access_token;
+      setupPicker();
+    }
+  }
+  function setupPicker() {
+    var picker = new google.picker.PickerBuilder()
+      .setOAuthToken(accessToken)
+      .setDeveloperKey(developerKey)
+      .addView(new google.picker.DocsUploadView())
+      .addView(new google.picker.DocsView())
+      .build();
+    picker.setVisible(true);
+  }
+</script>
+
+
+<script language='javascript' src='https://apis.google.com/js/api.js?onload=onApiLoad'></script>
+
