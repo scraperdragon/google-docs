@@ -22,11 +22,12 @@
   }
   function setupPicker() {
     var picker = new google.picker.PickerBuilder()
+      .addView(google.picker.ViewId.SPREADSHEETS)
       .setOAuthToken(accessToken)
       .setDeveloperKey(developerKey)
       //.addView(new google.picker.DocsUploadView())
       .addView(new google.picker.DocsView())
-      .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+      // .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
       .setCallback(pickerCallback)
       .build();
     picker.setVisible(true);
