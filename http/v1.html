@@ -1,0 +1,51 @@
+<head>
+<script>
+
+  var clientId = '775021312886-0dlsrrgg2mfchib14oicf2lt8ujd11t8.apps.googleusercontent.com';
+  var developerKey = 'AIzaSyBTEWsJ4aXdoOzB4ey81eX9-ja7HejL4Qc';
+  var accessToken;
+  function onApiLoad() {
+    gapi.load('auth', authenticateWithGoogle);
+    gapi.load('picker');
+  }
+  function authenticateWithGoogle() {
+    window.gapi.auth.authorize({
+      'client_id': clientId,
+      'scope': ['https://www.googleapis.com/auth/drive.readonly']
+    }, handleAuthentication);
+  }
+  function handleAuthentication(result) {
+    if(result && !result.error) {
+      accessToken = result.access_token;
+      setupPicker();
+    }
+  }
+  function setupPicker() {
+    var picker = new google.picker.PickerBuilder()
+      .setOAuthToken(accessToken)
+      .setDeveloperKey(developerKey)
+      //.addView(new google.picker.DocsUploadView())
+      .addView(new google.picker.DocsView())
+      .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+      .setCallback(pickerCallback)
+      .build();
+    picker.setVisible(true);
+  }
+
+  function pickerCallback(data) {
+    if (data.action == google.picker.Action.PICKED) {  // not CANCELED
+       use_id(data.docs[0].id);
+    }
+  }
+
+  function use_id(id) {
+    window.location.replace("../cgi-bin/download.py?id="+id+"&key="+accessToken+"&filename=foo.xlsx")
+  }
+
+</script>
+<script language='javascript' src='https://apis.google.com/js/api.js?onload=onApiLoad'></script>
+
+</head>
+<body>
+  <div id="results"></div>
+</body>
