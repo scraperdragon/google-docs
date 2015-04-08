@@ -29,6 +29,7 @@ def download_xls(doc_id, filename):
         xlsx_url = j['exportLinks']['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
     else:
         print doc_id
+    print xlsx_url
 
     xlsx_content = request_with_key(xlsx_url).content
     with open(filename, 'w') as f:
