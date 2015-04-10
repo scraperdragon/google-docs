@@ -1,0 +1,22 @@
+#!/bin/bash -e
+echo "Content-type: text/html"
+echo ""
+echo ""
+./downloadwithsavedtoken.py > /dev/null 2>> errors
+for i in *.xlsx
+do
+/home/.local/bin/bake ~/tool/swtime/swtime.recipe.py "$i" > /dev/null 2>> errors
+done
+./makenice > /dev/null 2>> errors
+cp nice.sqlite ~/http > /dev/null 2>> errors
+cp nice.sqlite ~/scraperwiki.sqlite > /dev/null 2>> errors
+echo "
+ <html>    
+  <head>      
+    <title>redirecting to db</title>      
+    <meta http-equiv=\"refresh\" content=\"0;URL='https://scraperwiki.com/dataset/uazwsj7'\" />    
+  </head>    
+  <body> 
+    <p>processed: redirecting to <a href='https://scraperwiki.com/dataset/uazwsj7'>database view</a></p> 
+  </body>  
+</html>"
