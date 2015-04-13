@@ -1,11 +1,33 @@
 <html>
   <head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="//scraperwiki.com/js/scraperwiki.js"></script>
   </head>
   <body>
+
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Total hours per job</a></li>
+    <li><a href="#tabs-2">Monthly hours per job</a></li>
+    <li><a href="#tabs-3">Last Timesheet Update</a></li>
+    <li><a href="#tabs-4">Monthly hours per person, per job</a></li>
+  </ul>
+  <div id="tabs-1">
     <div id=placeholder1>...</div>
+  </div>
+  <div id="tabs-2">
     <div id=placeholder2>...</div>
+  </div>
+  <div id="tabs-3">
+    <div id=placeholder3>...</div>
+  </div>
+  <div id="tabs-4">
+    <div id=placeholder4>...</div>
+  </div>
+</div>
+
     <script>
       function table(data) {
           text = '<table class=dragon>'
@@ -31,14 +53,29 @@
           text = text +'</table>';
           return text
       }
+
+      $(function() {
+          $( "#tabs" ).tabs();
+      });
+
       console.log("aa");
-      scraperwiki.sql('select sum(hours) as hrs, job from nice group by job order by hrs', 
+      scraperwiki.sql('select round(sum(hours),2) as hrs, job, max(date) as last_date from nice group by job order by last_date desc', 
           function(data, textStatus, jqXHR){;$('#placeholder1').html(table(data))},
           function(jqXHR, textStatus, errorThrown){console.log('foo')}
       );
       
-      scraperwiki.sql('select sum(hours) as hrs, job, month from nice group by job, month', 
+      scraperwiki.sql('select round(sum(hours),2) as hrs, job, month from nice group by job, month order by max(date) desc, job', 
           function(data, textStatus, jqXHR){;$('#placeholder2').html(table(data))},
+          function(jqXHR, textStatus, errorThrown){console.log('foo')}
+      );
+      
+      scraperwiki.sql('select person, max(date) as last_date from nice group by person order by last_date asc', 
+          function(data, textStatus, jqXHR){;$('#placeholder3').html(table(data))},
+          function(jqXHR, textStatus, errorThrown){console.log('foo')}
+      );
+      
+      scraperwiki.sql('select round(sum(hours),2) as hrs, person, month, job from nice group by person, month, job order by max(date) desc, person, job', 
+          function(data, textStatus, jqXHR){;$('#placeholder4').html(table(data))},
           function(jqXHR, textStatus, errorThrown){console.log('foo')}
       );
     </script>
