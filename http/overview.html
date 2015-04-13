@@ -4,7 +4,8 @@
     <script src="//scraperwiki.com/js/scraperwiki.js"></script>
   </head>
   <body>
-    <div id=placeholder>...</div>
+    <div id=placeholder1>...</div>
+    <div id=placeholder2>...</div>
     <script>
       function table(data) {
           text = '<table class=dragon>'
@@ -31,8 +32,13 @@
           return text
       }
       console.log("aa");
-      scraperwiki.sql('select sum(hours), month from nice group by month', 
-          function(data, textStatus, jqXHR){;$('#placeholder').html(table(data))},
+      scraperwiki.sql('select sum(hours) as hrs, job from nice group by job order by hrs', 
+          function(data, textStatus, jqXHR){;$('#placeholder1').html(table(data))},
+          function(jqXHR, textStatus, errorThrown){console.log('foo')}
+      );
+      
+      scraperwiki.sql('select sum(hours) as hrs, job, month from nice group by job, month', 
+          function(data, textStatus, jqXHR){;$('#placeholder2').html(table(data))},
           function(jqXHR, textStatus, errorThrown){console.log('foo')}
       );
     </script>
