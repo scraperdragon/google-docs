@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//scraperwiki.com/js/scraperwiki.js"></script>
+  </head>
+  <body>
+    <div id=placeholder>...</div>
+    <script>
+      function table(data) {
+          text = '<table class=dragon>'
+          has_header = 0
+          data.forEach(function(row) {
+              // make header
+              if (has_header == 0) {
+                  text = text + '<tr>'
+                  Object.keys(row).forEach(function(key) {
+                       text=text+'<th>'+key+'</th>'
+                  })
+                  text = text + '</tr>'
+                  has_header = 1
+              }
+                  
+              // output row
+              text=text+'<tr>';
+              Object.keys(row).forEach(function(key) {
+                  text=text+'<td>'+row[key]+'</td>'
+              })
+              text=text+'</tr>';
+          })
+          text = text +'</table>';
+          return text
+      }
+      console.log("aa");
+      scraperwiki.sql('select sum(hours), month from nice group by month', 
+          function(data, textStatus, jqXHR){;$('#placeholder').html(table(data))},
+          function(jqXHR, textStatus, errorThrown){console.log('foo')}
+      );
+    </script>
+  </body>
+</html>
