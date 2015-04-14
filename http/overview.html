@@ -4,6 +4,22 @@
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="//scraperwiki.com/js/scraperwiki.js"></script>
+
+    <script src='//cdn.datatables.net/1.10.6/js/jquery.dataTables.min.js'></script>
+    <link rel='stylesheet' href='//cdn.datatables.net/1.10.6/css/jquery.dataTables.min.css'>
+
+    <ascript src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.21.5/js/jquery.tablesorter.js"></ascript>
+    <ascript src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.21.5/js/jquery.tablesorter.widgets.min.js"></ascript>
+    <ascript>
+       $(function(){
+		$('table').tablesorter({
+			widgets        : ['zebra', 'columns'],
+			usNumberFormat : false,
+			sortReset      : true,
+			sortRestart    : true
+		});
+	});
+    </ascript>
   </head>
   <body>
 
@@ -15,23 +31,23 @@
     <li><a href="#tabs-4">Monthly hours per person, per job</a></li>
   </ul>
   <div id="tabs-1">
-    <div id=placeholder1>...</div>
+    <table id=placeholder1 class=""><tr><th>column1</th></tr></table>
   </div>
   <div id="tabs-2">
-    <div id=placeholder2>...</div>
+    <table id=placeholder2 class=""><tr><th>column1</th></tr></table>
   </div>
   <div id="tabs-3">
-    <div id=placeholder3>...</div>
+    <table id=placeholder3 class=""><tr><th>column1</th></tr></table>
   </div>
   <div id="tabs-4">
-    <div id=placeholder4>...</div>
+    <table id=placeholder4 class=""><tr><th>column1</th></tr></table>
   </div>
 </div>
 
     <script>
       function table(data) {
-          text = '<table class=dragon>'
           has_header = 0
+          text = ''
           data.forEach(function(row) {
               // make header
               if (has_header == 0) {
@@ -50,7 +66,6 @@
               })
               text=text+'</tr>';
           })
-          text = text +'</table>';
           return text
       }
 
@@ -60,24 +75,30 @@
 
       console.log("aa");
       scraperwiki.sql('select round(sum(hours),2) as hrs, job, max(date) as last_date from nice group by job order by last_date desc', 
-          function(data, textStatus, jqXHR){;$('#placeholder1').html(table(data))},
+          function(data, textStatus, jqXHR){$('#placeholder1').html(table(data))},
           function(jqXHR, textStatus, errorThrown){console.log('foo')}
       );
       
       scraperwiki.sql('select round(sum(hours),2) as hrs, job, month from nice group by job, month order by max(date) desc, job', 
-          function(data, textStatus, jqXHR){;$('#placeholder2').html(table(data))},
+          function(data, textStatus, jqXHR){$('#placeholder2').html(table(data))},
           function(jqXHR, textStatus, errorThrown){console.log('foo')}
       );
       
       scraperwiki.sql('select person, max(date) as last_date from nice group by person order by last_date asc', 
-          function(data, textStatus, jqXHR){;$('#placeholder3').html(table(data))},
+          function(data, textStatus, jqXHR){$('#placeholder3').html(table(data))},
           function(jqXHR, textStatus, errorThrown){console.log('foo')}
       );
       
       scraperwiki.sql('select round(sum(hours),2) as hrs, person, month, job from nice group by person, month, job order by max(date) desc, person, job', 
-          function(data, textStatus, jqXHR){;$('#placeholder4').html(table(data))},
+          function(data, textStatus, jqXHR){$('#placeholder4').html(table(data))},
           function(jqXHR, textStatus, errorThrown){console.log('foo')}
       );
+
+	$(document).ready(function(){
+            console.log($('table'));
+	    //$('table').DataTable();
+	});
+
     </script>
   </body>
 </html>
