@@ -13,10 +13,11 @@
 
 <div id="tabs">
   <ul>
-    <li><a href="#tabs-1">Total hours per job</a></li>
-    <li><a href="#tabs-2">Monthly hours per job</a></li>
+    <li><a href="#tabs-1">Total days per job</a></li>
+    <li><a href="#tabs-2">Monthly days per job</a></li>
+    <li><a href="#tabs-4">Monthly days per person, per job</a></li>
+    <li><a href="#tabs-5">Days per person, per job</a></li>
     <li><a href="#tabs-3">Last Timesheet Update</a></li>
-    <li><a href="#tabs-4">Monthly hours per person, per job</a></li>
   </ul>
   <div id="tabs-1">
     <table id=t1 class=""><tr><th>column1</th></tr></table>
@@ -29,6 +30,9 @@
   </div>
   <div id="tabs-4">
     <table id=t4 class=""><tr><th>column1</th></tr></table>
+  </div>
+  <div id="tabs-5">
+    <table id=t5 class=""><tr><th>column1</th></tr></table>
   </div>
 </div>
 
@@ -77,10 +81,11 @@
           $( "#tabs" ).tabs();
       });
 
-      do_sql('select round(sum(hours),2) as hrs, job, max(date) as last_date from nice group by job order by last_date desc', '#t1');
-      do_sql('select round(sum(hours),2) as hrs, job, month from nice group by job, month order by max(date) desc, job', '#t2');
+      do_sql('select round(sum(daysworked),2) as days, job, max(date) as last_date from nice group by job order by last_date desc', '#t1');
+      do_sql('select round(sum(daysworked),2) as days, job, month from nice group by job, month order by max(date) desc, job', '#t2');
       do_sql('select person, max(date) as last_date from nice group by person order by last_date asc', '#t3');
-      do_sql('select round(sum(hours),2) as hrs, person, month, job from nice group by person, month, job order by max(date) desc, person, job', '#t4');
+      do_sql('select round(sum(daysworked),2) as days, person, month, job from nice group by person, month, job order by max(date) desc, person, job', '#t4');
+      do_sql('select round(sum(daysworked),2) as days, person, job from nice group by person, job order by max(date) desc, person, job', '#t5');
       
     </script>
 

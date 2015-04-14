@@ -1,5 +1,5 @@
 #!/bin/sh -e
-echo "hours,job,date,month,person" > nice.csv
+echo "daysworked,job,date,month,person" > nice.csv
 cat data*.csv | grep -v "\*\*\*\*\*" | grep -v "observation" | csvcut -c 1,39,47,55,63 >> nice.csv
 rm -f nice.sqlite
 csvsql --db sqlite:///nice.sqlite nice.csv --insert
