@@ -85,7 +85,7 @@
       do_sql('select round(sum(daysworked),2) as days, job, month from nice group by job, month order by max(date) desc, job', '#t2');
       do_sql('select person, max(date) as last_date from nice group by person order by last_date asc', '#t3');
       do_sql('select round(sum(daysworked),2) as days, person, month, job from nice group by person, month, job order by max(date) desc, person, job', '#t4');
-      do_sql('select round(sum(daysworked),2) as days, person, job from nice group by person, job order by max(date) desc, person, job', '#t5');
+      do_sql('select round(sum(daysworked),2) as days, person, job from nice group by person, job order by person, job', '#t5');
       
     </script>
 
